@@ -18,6 +18,8 @@ import Dashboard from "./pages/Dashboard";
 import VehicleManagement from "./pages/VehicleManagement";
 import PaymentMethods from "./pages/PaymentMethods";
 import AuthCallback from "./pages/AuthCallback";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 import NotFound from "./pages/NotFound";
 
@@ -32,6 +34,8 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/user-signup" element={<UserSignup />} />
           <Route path="/mechanic-signup" element={<MechanicSignup />} />

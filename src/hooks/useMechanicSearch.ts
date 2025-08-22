@@ -84,11 +84,17 @@ export const useMechanicSearch = () => {
       return;
     }
 
+    toast.info('Getting your location...');
+
     try {
       const position = await getCurrentPosition();
       const { latitude, longitude } = position.coords;
       
-      // Use Google Maps Geocoding API for more accurate location data
+      // Always set current location from GPS coordinates first
+      setCurrentLocation({ lat: latitude, lng: longitude });
+      generateMechanicsForLocation(latitude, longitude, searchRadius);
+      
+      // Try Google Maps Geocoding API for readable address
       try {
         const loader = new Loader({
           apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
@@ -106,11 +112,6 @@ export const useMechanicSearch = () => {
         if (response.results && response.results[0]) {
           const address = response.results[0].formatted_address;
           setLocation(address);
-          setCurrentLocation({ lat: latitude, lng: longitude });
-          
-          // Generate mechanics around this location
-          generateMechanicsForLocation(latitude, longitude, searchRadius);
-          
           toast.success('Location found successfully!');
         } else {
           // Fallback to OpenStreetMap if Google Maps fails

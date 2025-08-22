@@ -45,11 +45,11 @@ export function useMechanicProfileCreation() {
     try {
       const profileData = {
         user_id: user.id,
-        business_name: formData.businessName,
-        phone: formData.phone,
-        bio: formData.bio,
-        address: formData.businessAddress,
-        services_offered: services,
+        business_name: formData.businessName || 'Business Name Required',
+        phone: formData.phone || '',
+        bio: formData.bio || '',
+        address: formData.businessAddress || '',
+        services_offered: services || {},
         business_hours: {
           monday: { open: '08:00', close: '18:00', closed: false },
           tuesday: { open: '08:00', close: '18:00', closed: false },
@@ -60,7 +60,7 @@ export function useMechanicProfileCreation() {
           sunday: { open: '10:00', close: '14:00', closed: false }
         },
         is_available: true,
-        rating: 5.0,
+        rating: 0.0,
         review_count: 0,
         average_response_time: 15
       };
