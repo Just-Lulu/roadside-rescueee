@@ -44,7 +44,8 @@ const RequestHelp = () => {
     
     try {
       const requestData = {
-        mechanic_id: id,
+        // Only include mechanic_id if it's not a dummy ID (UUIDs have 36 characters with hyphens)
+        mechanic_id: id && id.length === 36 && id.includes('-') ? id : undefined,
         issue_type: issueType,
         description,
         contact_method: contactMethod,
