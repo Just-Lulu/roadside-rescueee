@@ -26,11 +26,11 @@ const FindMechanic = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <div className="flex-grow bg-gray-50">
+      <div className="flex-grow bg-background/50">
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Find Roadside Assistance in Nigeria</h1>
-            <p className="mt-2 text-gray-600">
+            <h1 className="text-3xl font-bold text-foreground">Find Roadside Assistance in Nigeria</h1>
+            <p className="mt-2 text-muted-foreground">
               Search for mechanics near your location who can help with your vehicle issues
             </p>
           </div>

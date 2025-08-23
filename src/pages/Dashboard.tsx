@@ -15,6 +15,8 @@ import { useProfiles } from '@/hooks/useProfiles';
 import { useMechanicProfiles } from '@/hooks/useMechanicProfiles';
 import { MechanicProfileCard } from '@/components/dashboard/MechanicProfileCard';
 import { MechanicProfileForm } from '@/components/dashboard/MechanicProfileForm';
+import { DashboardCardSkeleton, ServiceRequestSkeleton } from '@/components/LoadingStates';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
@@ -74,13 +76,13 @@ const Dashboard = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <div className="flex-grow bg-gray-50">
+      <div className="flex-grow bg-background/50">
         <div className="container mx-auto px-4 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-foreground">
               Welcome, {profile?.first_name || user.user_metadata?.business_name || user.email}!
             </h1>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-muted-foreground">
               {isMechanic 
                 ? 'Manage your mechanic services and view incoming requests'
                 : 'Manage your vehicles and service requests'
