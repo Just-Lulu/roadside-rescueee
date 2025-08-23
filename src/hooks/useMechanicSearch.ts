@@ -94,34 +94,8 @@ export const useMechanicSearch = () => {
       setCurrentLocation({ lat: latitude, lng: longitude });
       generateMechanicsForLocation(latitude, longitude, searchRadius);
       
-      // Try Google Maps Geocoding API for readable address
-      try {
-        const loader = new Loader({
-          apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
-          version: 'weekly',
-          libraries: ['geocoding']
-        });
-
-        await loader.load();
-        
-        const geocoder = new window.google.maps.Geocoder();
-        const response = await geocoder.geocode({
-          location: { lat: latitude, lng: longitude }
-        });
-
-        if (response.results && response.results[0]) {
-          const address = response.results[0].formatted_address;
-          setLocation(address);
-          toast.success('Location found successfully!');
-        } else {
-          // Fallback to OpenStreetMap if Google Maps fails
-          await fallbackGeocoding(latitude, longitude);
-        }
-      } catch (error) {
-        console.error('Google Maps geocoding error:', error);
-        // Fallback to OpenStreetMap
-        await fallbackGeocoding(latitude, longitude);
-      }
+      // Always use OpenStreetMap for geocoding (more reliable)
+      await fallbackGeocoding(latitude, longitude);
       
       setIsSearching(false);
     } catch (error: any) {
@@ -179,7 +153,7 @@ export const useMechanicSearch = () => {
           // Generate mechanics around this location
           generateMechanicsForLocation(latitude, longitude, searchRadius);
           
-          toast.success('Location found using fallback service');
+          toast.success('Location found successfully!');
         } else {
           setLocation(`${latitude}, ${longitude}`);
           setCurrentLocation({ lat: latitude, lng: longitude });
@@ -187,7 +161,7 @@ export const useMechanicSearch = () => {
           // Generate mechanics around coordinates
           generateMechanicsForLocation(latitude, longitude, searchRadius);
           
-          toast.info('Exact address not found, showing coordinates');
+          toast.success('Location found! Showing nearby mechanics.');
         }
       } else {
         setLocation(`${latitude}, ${longitude}`);
@@ -196,7 +170,7 @@ export const useMechanicSearch = () => {
         // Generate mechanics around coordinates
         generateMechanicsForLocation(latitude, longitude, searchRadius);
         
-        toast.info('Address lookup failed, showing coordinates');
+        toast.success('Location found! Showing nearby mechanics.');
       }
     } catch (error) {
       console.error('Fallback geocoding error:', error);
@@ -206,7 +180,7 @@ export const useMechanicSearch = () => {
       // Generate mechanics around coordinates
       generateMechanicsForLocation(latitude, longitude, searchRadius);
       
-      toast.info('Address lookup failed, showing coordinates');
+      toast.success('Location found! Showing nearby mechanics.');
     }
   };
 
