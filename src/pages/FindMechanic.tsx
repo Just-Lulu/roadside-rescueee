@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SearchForm from '@/components/mechanic-search/SearchForm';
 import SearchResults from '@/components/mechanic-search/SearchResults';
+import EnhancedSearchFilters from '@/components/EnhancedSearchFilters';
 import { useMechanicSearch } from '@/hooks/useMechanicSearch';
 
 const FindMechanic = () => {
@@ -15,11 +16,13 @@ const FindMechanic = () => {
     mechanics,
     selectedMechanic,
     currentLocation,
+    filters,
     handleSearch,
     handleCityChange,
     handleUseLocation,
     toggleMechanicSelection,
-    handleRadiusChange
+    handleRadiusChange,
+    handleFiltersChange
   } = useMechanicSearch();
 
   return (
@@ -45,6 +48,16 @@ const FindMechanic = () => {
             handleUseLocation={handleUseLocation}
             isSearching={isSearching}
           />
+          
+          {/* Enhanced Filters */}
+          {location && (
+            <div className="mb-6">
+              <EnhancedSearchFilters 
+                onFiltersChange={handleFiltersChange}
+                className="bg-card/50 backdrop-blur-sm"
+              />
+            </div>
+          )}
           
         {location && (
           <SearchResults

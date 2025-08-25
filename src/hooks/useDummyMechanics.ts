@@ -14,6 +14,8 @@ export interface DummyMechanic {
   bio: string;
   latitude: number;
   longitude: number;
+  available: boolean;
+  responseTime: number; // in minutes
   services: {
     towing: boolean;
     jumpStart: boolean;
@@ -89,6 +91,8 @@ const generateMechanicsAroundLocation = (centerLat: number, centerLng: number, r
       bio: generateBio(mechanic.business),
       latitude: lat,
       longitude: lng,
+      available: Math.random() > 0.2, // 80% availability
+      responseTime: Math.floor(Math.random() * 45) + 15, // 15-60 minutes
       services: {
         towing: Math.random() > 0.2,
         jumpStart: Math.random() > 0.1,

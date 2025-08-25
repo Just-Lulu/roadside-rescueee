@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import { toast } from 'sonner';
 import { useDummyMechanics } from './useDummyMechanics';
+import { SearchFilters } from '@/components/EnhancedSearchFilters';
 
 // Declare google object for TypeScript
 declare global {
@@ -18,8 +19,94 @@ export const useMechanicSearch = () => {
   const [selectedMechanic, setSelectedMechanic] = useState<string | null>(null);
   const [currentLocation, setCurrentLocation] = useState<{lat: number, lng: number} | null>(null);
   const [searchRadius, setSearchRadius] = useState<number>(20); // Default 20km radius
+  const [filters, setFilters] = useState<SearchFilters>({
+    maxDistance: 20,
+    availableOnly: true,
+    minRating: 0,
+    maxResponseTime: 60,
+    services: [],
+    sortBy: 'distance',
+    sortOrder: 'asc'
+  });
   
   const { mechanics, isLoading: mechanicsLoading, generateMechanicsForLocation, clearMechanics } = useDummyMechanics();
+
+  // Apply filters to mechanics
+  const filteredMechanics = mechanics
+    .filter(mechanic => {
+      // Distance filter (convert string distance to number)
+      const distanceKm = parseFloat(mechanic.distance);
+      if (distanceKm > filters.maxDistance) return false;
+      
+      // Availability filter
+      if (filters.availableOnly && !mechanic.available) return false;
+      
+      // Rating filter
+      if (mechanic.rating < filters.minRating) return false;
+      
+      // Response time filter
+      if (mechanic.responseTime > filters.maxResponseTime) return false;
+      
+      // Service filter - check if mechanic offers required services
+      if (filters.services.length > 0) {
+        const serviceMap: Record<string, keyof typeof mechanic.services> = {
+          'Towing': 'towing',
+          'Jump Start': 'jumpStart',
+          'Tire Change': 'tireFix',
+          'Fuel Delivery': 'fuelDelivery',
+          'Lockout Service': 'lockoutService',
+          'Basic Repair': 'basicRepair'
+        };
+        
+        const hasRequiredService = filters.services.some(serviceName => {
+          const serviceKey = serviceMap[serviceName];
+          return serviceKey && mechanic.services[serviceKey];
+        });
+        if (!hasRequiredService) return false;
+      }
+      
+      return true;
+    })
+    .sort((a, b) => {
+      let aValue, bValue;
+      
+      switch (filters.sortBy) {
+        case 'distance':
+          aValue = parseFloat(a.distance);
+          bValue = parseFloat(b.distance);
+          break;
+        case 'rating':
+          aValue = a.rating;
+          bValue = b.rating;
+          break;
+        case 'response_time':
+          aValue = a.responseTime;
+          bValue = b.responseTime;
+          break;
+        default:
+          aValue = parseFloat(a.distance);
+          bValue = parseFloat(b.distance);
+      }
+      
+      return filters.sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+    });
+
+  // Handle filter changes
+  const handleFiltersChange = (newFilters: SearchFilters) => {
+    setFilters(newFilters);
+    setSearchRadius(newFilters.maxDistance);
+    
+    // Re-generate mechanics with new distance if location is available
+    if (currentLocation && newFilters.maxDistance !== filters.maxDistance) {
+      clearMechanics();
+      setIsSearching(true);
+      
+      setTimeout(() => {
+        generateMechanicsForLocation(currentLocation.lat, currentLocation.lng, newFilters.maxDistance);
+        setIsSearching(false);
+      }, 800);
+    }
+  };
 
   // Handle location search
   const handleSearch = (e: React.FormEvent) => {
@@ -215,14 +302,16 @@ export const useMechanicSearch = () => {
     setLocation,
     selectedCity,
     isSearching: isSearching || mechanicsLoading,
-    mechanics,
+    mechanics: filteredMechanics,
     selectedMechanic,
     currentLocation,
     searchRadius,
+    filters,
     handleSearch,
     handleCityChange,
     handleUseLocation,
     toggleMechanicSelection,
-    handleRadiusChange
+    handleRadiusChange,
+    handleFiltersChange
   };
 };

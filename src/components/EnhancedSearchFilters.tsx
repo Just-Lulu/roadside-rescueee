@@ -40,14 +40,12 @@ const defaultFilters: SearchFilters = {
 };
 
 const availableServices = [
-  'Battery Service',
+  'Towing',
+  'Jump Start', 
   'Tire Change',
-  'Jump Start',
   'Fuel Delivery',
   'Lockout Service',
-  'Towing',
-  'Engine Diagnostics',
-  'Brake Repair'
+  'Basic Repair'
 ];
 
 const EnhancedSearchFilters: React.FC<SearchFiltersProps> = ({ 

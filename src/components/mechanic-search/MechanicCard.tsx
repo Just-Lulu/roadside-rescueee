@@ -6,19 +6,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import ServiceCard, { ServiceType } from '@/components/ServiceCard';
-import { Mechanic } from '@/types/mechanic';
+import { DummyMechanic } from '@/hooks/useDummyMechanics';
 import { useAuth } from '@/hooks/useAuth';
 
 interface MechanicCardProps {
-  mechanic: Mechanic;
+  mechanic: DummyMechanic;
   isSelected: boolean;
-  onSelect: (id: string) => void;
+  onToggleSelection: () => void;
 }
 
 const MechanicCard: React.FC<MechanicCardProps> = ({ 
   mechanic, 
   isSelected, 
-  onSelect 
+  onToggleSelection 
 }) => {
   const { user } = useAuth();
 
@@ -30,7 +30,7 @@ const MechanicCard: React.FC<MechanicCardProps> = ({
           ? 'border-primary shadow-md' 
           : 'hover:border-primary/20'
       }`}
-      onClick={() => onSelect(mechanic.id)}
+      onClick={() => onToggleSelection()}
     >
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
@@ -83,7 +83,17 @@ const MechanicCard: React.FC<MechanicCardProps> = ({
             
             {isSelected && (
               <div className="mt-4 pt-4 border-t border-border">
-                <ServiceCard services={mechanic.services as Record<ServiceType, boolean>} />
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Available Services:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {mechanic.services.towing && <Badge variant="outline" className="text-xs">Towing</Badge>}
+                    {mechanic.services.jumpStart && <Badge variant="outline" className="text-xs">Jump Start</Badge>}
+                    {mechanic.services.tireFix && <Badge variant="outline" className="text-xs">Tire Fix</Badge>}
+                    {mechanic.services.fuelDelivery && <Badge variant="outline" className="text-xs">Fuel Delivery</Badge>}
+                    {mechanic.services.lockoutService && <Badge variant="outline" className="text-xs">Lockout Service</Badge>}
+                    {mechanic.services.basicRepair && <Badge variant="outline" className="text-xs">Basic Repair</Badge>}
+                  </div>
+                </div>
                 <div className="mt-4 flex gap-2">
                   <Link to={`/mechanic-profile/${mechanic.id}`} className="flex-grow">
                     <Button className="w-full" variant="default">

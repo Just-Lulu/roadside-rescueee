@@ -3,10 +3,10 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Map from '@/components/Map';
 import MechanicCard from './MechanicCard';
-import { Mechanic } from '@/types/mechanic';
+import { DummyMechanic } from '@/hooks/useDummyMechanics';
 
 interface MechanicListProps {
-  mechanics: Mechanic[];
+  mechanics: DummyMechanic[];
   selectedMechanic: string | null;
   toggleMechanicSelection: (id: string) => void;
   location: string;
@@ -37,7 +37,7 @@ const MechanicList: React.FC<MechanicListProps> = ({
               key={mechanic.id}
               mechanic={mechanic}
               isSelected={selectedMechanic === mechanic.id}
-              onSelect={toggleMechanicSelection}
+              onToggleSelection={() => toggleMechanicSelection(mechanic.id)}
             />
           ))}
         </TabsContent>

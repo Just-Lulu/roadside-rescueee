@@ -5,11 +5,11 @@ import { MapPin } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import Map from '@/components/Map';
 import MechanicList from './MechanicList';
-import { Mechanic } from '@/types/mechanic';
+import { DummyMechanic } from '@/hooks/useDummyMechanics';
 
 interface SearchResultsProps {
   location: string;
-  mechanics: Mechanic[];
+  mechanics: DummyMechanic[];
   selectedMechanic: string | null;
   toggleMechanicSelection: (id: string) => void;
   currentLocation: { lat: number; lng: number } | null;
@@ -51,7 +51,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({
               lat: m.latitude,
               lng: m.longitude,
               name: m.name,
-              distanceKm: m.distance,
+              distanceKm: m.distance, // Keep as string to match Map interface
             }))}
             selectedMechanicId={selectedMechanic}
             onMechanicClick={toggleMechanicSelection}
