@@ -70,87 +70,87 @@ const CHART_TEMPLATES = {
 
   erd: `erDiagram
     USERS {
-        uuid id PK
-        string email UK
+        string id PK
+        string email
         string first_name
         string last_name
         string phone
-        timestamp created_at
-        timestamp updated_at
+        datetime created_at
+        datetime updated_at
     }
     
     PROFILES {
-        uuid id PK
-        uuid user_id FK
+        string id PK
+        string user_id FK
         string display_name
         string avatar_url
-        text bio
-        timestamp created_at
-        timestamp updated_at
+        string bio
+        datetime created_at
+        datetime updated_at
     }
     
     MECHANICS {
-        uuid id PK
-        uuid user_id FK
+        string id PK
+        string user_id FK
         string business_name
-        text description
-        json specializations
-        decimal hourly_rate
+        string description
+        string specializations
+        float hourly_rate
         string location
-        point coordinates
+        string coordinates
         boolean verified
-        decimal rating
-        integer total_reviews
-        timestamp created_at
-        timestamp updated_at
+        float rating
+        int total_reviews
+        datetime created_at
+        datetime updated_at
     }
     
     VEHICLES {
-        uuid id PK
-        uuid user_id FK
+        string id PK
+        string user_id FK
         string make
         string model
-        integer year
+        int year
         string license_plate
-        text notes
-        timestamp created_at
-        timestamp updated_at
+        string notes
+        datetime created_at
+        datetime updated_at
     }
     
     SERVICE_REQUESTS {
-        uuid id PK
-        uuid user_id FK
-        uuid mechanic_id FK
-        uuid vehicle_id FK
+        string id PK
+        string user_id FK
+        string mechanic_id FK
+        string vehicle_id FK
         string service_type
-        text description
+        string description
         string status
-        decimal estimated_cost
-        decimal final_cost
-        timestamp scheduled_at
-        timestamp completed_at
-        timestamp created_at
-        timestamp updated_at
+        float estimated_cost
+        float final_cost
+        datetime scheduled_at
+        datetime completed_at
+        datetime created_at
+        datetime updated_at
     }
     
     REVIEWS {
-        uuid id PK
-        uuid service_request_id FK
-        uuid user_id FK
-        uuid mechanic_id FK
-        integer rating
-        text comment
+        string id PK
+        string service_request_id FK
+        string user_id FK
+        string mechanic_id FK
+        int rating
+        string comment
         boolean is_public
-        timestamp created_at
+        datetime created_at
     }
     
     USERS ||--o{ PROFILES : has
-    USERS ||--o{ MECHANICS : "can be"
+    USERS ||--o{ MECHANICS : "can_be"
     USERS ||--o{ VEHICLES : owns
     USERS ||--o{ SERVICE_REQUESTS : creates
     MECHANICS ||--o{ SERVICE_REQUESTS : receives
     VEHICLES ||--o{ SERVICE_REQUESTS : involves
-    SERVICE_REQUESTS ||--o| REVIEWS : generates
+    SERVICE_REQUESTS ||--|| REVIEWS : generates
     USERS ||--o{ REVIEWS : writes
     MECHANICS ||--o{ REVIEWS : receives`,
 
