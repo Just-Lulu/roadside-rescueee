@@ -256,17 +256,44 @@ export default function ChartEditor() {
     const svgElement = chartRef.current?.querySelector('svg');
     if (!svgElement) return;
 
+    // Create a canvas to convert SVG to JPG
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     const svgData = new XMLSerializer().serializeToString(svgElement);
     const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      
+      // Fill with white background
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the SVG
+      ctx.drawImage(img, 0, 0);
+      
+      // Convert to JPG and download
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const jpgUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = jpgUrl;
+        link.download = `${activeChart}-chart.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(jpgUrl);
+      }, 'image/jpeg', 0.9);
+      
+      URL.revokeObjectURL(url);
+    };
     
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${activeChart}-chart.svg`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    img.src = url;
   };
 
   return (
@@ -292,7 +319,7 @@ export default function ChartEditor() {
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
-                Download SVG
+                Download JPG
               </Button>
               <Button
                 variant="outline"
