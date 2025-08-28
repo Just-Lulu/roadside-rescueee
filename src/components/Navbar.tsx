@@ -29,6 +29,7 @@ const Navbar: React.FC = () => {
         <div className="hidden md:flex items-center space-x-6">
           <Link to="/" className="text-gray-700 hover:text-roadside-600 transition-colors">Home</Link>
           <Link to="/find-mechanic" className="text-gray-700 hover:text-roadside-600 transition-colors">Find Mechanic</Link>
+          <Link to="/charts" className="text-gray-700 hover:text-roadside-600 transition-colors">System Charts</Link>
           
           
           {user ? (
@@ -87,6 +88,13 @@ const Navbar: React.FC = () => {
               onClick={toggleMenu}
             >
               Find Mechanic
+            </Link>
+            <Link 
+              to="/charts" 
+              className="text-gray-700 hover:text-roadside-600 transition-colors py-2"
+              onClick={toggleMenu}
+            >
+              System Charts
             </Link>
             
             {user ? (

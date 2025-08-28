@@ -20,6 +20,7 @@ import PaymentMethods from "./pages/PaymentMethods";
 import AuthCallback from "./pages/AuthCallback";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Charts from "./pages/Charts";
 
 import NotFound from "./pages/NotFound";
 
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/mechanic-profile/:id" element={<MechanicProfile />} />
           <Route path="/request-help/:id" element={<RequestHelp />} />
           <Route path="/security-notice" element={<SecurityNotice />} />
+          <Route path="/charts" element={<Charts />} />
           
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/vehicle-management" element={<ProtectedRoute><VehicleManagement /></ProtectedRoute>} />
